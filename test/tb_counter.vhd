@@ -34,10 +34,12 @@ architecture test of tb_counter is
         test_runner : process
         begin
             test_runner_setup(runner,runner_cfg);
+            rst <= '1';
+            load <= '0';
+            wait until rising_edge(clk);
+            rst <= '0';
 
             while test_suite loop
-                rst <= '0';
-                load <= '0';
                 wait until rising_edge(clk);
                 if run("Test counting") then
                     info("Testing if count passes");
@@ -49,7 +51,6 @@ architecture test of tb_counter is
                 elsif run("count data reached limit") then
                 
                     load <= '1';
-                    rst <= '0';
                     load_data <= std_logic_vector (limit - 10);
                     wait until rising_edge(clk);
                     --wait until rising_edge(clk);
@@ -63,22 +64,19 @@ architecture test of tb_counter is
                         wait until rising_edge(clk);
                     end loop;
                 elsif run("testing multiple of 3,5 and 15 signals") then
-                    rst <= '1';
-                    wait until rising_edge(clk);
-                    rst<= '0';
-                    wait until rising_edge(clk);
+
                     for i in 1 to 100 loop
                         info ("count is: "&to_string(count));
                         info ("i is:"& to_string(count));
                         if(i mod 3 =0 ) then
                             check_equal(m_three,'1');
                         end if;
-                        -- if(to_integer(unsigned(count)) mod 5=0) then
-                        --     check_equal(m_five,'1');
-                        -- end if;
-                        -- if(unsigned (count) mod 15/=0)then
-                        --     check_equal(m_fifteen,'1');
-                        -- end if;
+                        if(to_integer(unsigned(count)) mod 5=0) then
+                            check_equal(m_five,'1');
+                        end if;
+                        if(unsigned (count) mod 15/=0)then
+                            check_equal(m_fifteen,'1');
+                        end if;
                     wait until rising_edge(clk);
                     end loop;
                  end if;
