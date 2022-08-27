@@ -64,7 +64,7 @@ begin
     end process;
     multiple_three <= count_2_bit(1) AND (count_2_bit(0)); -- by_three wire gets high if both bits of the 2-bit counter are both 1. i.e.  B"11"= 3
     multiple_five <=  count_3_bit(2) AND (NOT count_3_bit(1)) AND (count_3_bit(0)); -- by_five wire gets high if the 3 bit counter value in binary is B"101"=5
-    multiple_fifteen <= NOT (by_three AND by_five); -- by_fifteen wire gets high if either by_three or by_five is logic 0
+    multiple_fifteen <= NOT (multiple_three AND multiple_five); -- by_fifteen wire gets high if either by_three or by_five is logic 0
     output <= std_logic_vector (count); -- connect the count wire to the 32-bit output counter of the entity
     -- multiple_three <= by_three;  -- connect the by_three wire to the output signal  multiple_three
     -- multiple_five <= by_five;    -- connect the by_five wire to the output signal  multiple_five
